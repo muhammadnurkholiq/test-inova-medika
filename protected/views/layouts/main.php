@@ -30,11 +30,14 @@
 		<div id="mainmenu">
 			<?php $this->widget('zii.widgets.CMenu', array(
 				'items' => array(
-					array('label' => 'Home', 'url' => array('/site/index'), 'visible' => !Yii::app()->user->isGuest),
-					array('label' => 'About', 'url' => array('/site/page', 'view' => 'about'), 'visible' => !Yii::app()->user->isGuest),
-					array('label' => 'Contact', 'url' => array('/site/contact'), 'visible' => !Yii::app()->user->isGuest),
+					// admin
+					array('label' => 'User Management', 'url' => array('site/adminUsers/index'),  'visible' => !Yii::app()->user->isGuest && Yii::app()->user->role = 'admin'),
+
+					// employee
+
+					// auth
 					array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),
-					array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest)
+					array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest),
 				),
 			)); ?>
 		</div><!-- mainmenu -->

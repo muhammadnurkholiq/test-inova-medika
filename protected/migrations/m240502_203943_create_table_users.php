@@ -36,17 +36,6 @@ class m240502_203943_create_table_users extends CDbMigration
 				'created_at' => date('Y-m-d H:i:s')
 			]
 		);
-		$this->insert(
-			'users',
-			[
-				'username' => 'patient',
-				'password' => md5('pass'),
-				'role' => 'patient',
-				'address' => 'Bandung',
-				'date_of_birth' => '2001-04-11',
-				'created_at' => date('Y-m-d H:i:s')
-			],
-		);
 	}
 
 	public function down()

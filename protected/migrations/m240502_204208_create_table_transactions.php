@@ -6,7 +6,7 @@ class m240502_204208_create_table_transactions extends CDbMigration
 	{
 		$this->createTable('transactions', [
 			'id' => 'pk',
-			'patient_id' => 'integer REFERENCES users(id)',
+			'patient_id' => 'integer REFERENCES patients(id)',
 			'employee_id' => 'integer REFERENCES users(id)',
 			'action_id' => 'integer REFERENCES actions(id)',
 			'medicine_id' => 'integer REFERENCES medicines(id)',
@@ -15,7 +15,7 @@ class m240502_204208_create_table_transactions extends CDbMigration
 		]);
 
 		$this->insert('transactions', [
-			'patient_id' => 3,
+			'patient_id' => 1,
 			'employee_id' => 2,
 			'action_id' => 1,
 			'medicine_id' => 1,

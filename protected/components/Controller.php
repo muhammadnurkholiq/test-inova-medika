@@ -6,13 +6,12 @@
  */
 class Controller extends CController
 {
+
 	public function beforeAction($action)
 	{
-		// Jika pengguna belum login dan tindakan bukan 'login'
 		if (Yii::app()->user->isGuest && $action->id !== 'login') {
-			// Arahkan pengguna ke halaman login
 			$this->redirect(['site/login']);
-			return false; // Menghentikan eksekusi tindakan saat ini
+			return false;
 		}
 		return parent::beforeAction($action);
 	}
