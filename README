@@ -1,0 +1,45 @@
+# Yii Version 1 Project with PostgreSQL Database
+
+This project uses the Yii version 1 framework with a PostgreSQL database.
+
+## Requirements
+
+- PHP 7.x or newer.
+- PostgreSQL 9.5 or newer.
+
+## Database Setup
+
+1. **Create a PostgreSQL database:**
+    - Create the PostgreSQL database that will be used by the project. You can create the database using `psql` or another tool you prefer.
+        ```shell
+        psql -U username -c "CREATE DATABASE database_name;"
+        ```
+
+    - Replace `username` with your PostgreSQL username and `database_name` with the name of the database you want to create.
+
+2. **Configure database connection:**
+    - Update the database connection settings in the `protected/config/main.php` file. Example settings for PostgreSQL:
+        ```php
+        'db' => [
+            'class' => 'CDbConnection',
+            'connectionString' => 'pgsql:host=localhost;port=5432;dbname=database_name',
+            'username' => 'username',
+            'password' => 'password',
+            'charset' => 'utf8',
+            'emulatePrepare' => true,
+        ],
+        ```
+
+    - Adjust the `connectionString`, `username`, and `password` according to your database configuration.
+
+## Run Database Migration
+
+1. **Run migration:**
+    - Once the database connection has been configured, run the migration using the following command in the project's directory:
+        ```shell
+        php protected/yiic migrate
+        ```
+
+    - This command will run all migrations that have not yet been applied to the database. Ensure the database connection is correctly configured before running the command.
+
+That's how you create a PostgreSQL database and run migrations in your Yii version 1 project. Be sure to test the project after the migration completes to ensure everything is working as expected. Thank you!
