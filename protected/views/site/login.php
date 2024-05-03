@@ -4,7 +4,6 @@
 /* @var $form CActiveForm */
 
 $this->pageTitle = Yii::app()->name . ' - Login';
-$this->breadcrumbs = ['Login'];
 
 ?>
 

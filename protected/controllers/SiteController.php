@@ -53,7 +53,7 @@ class SiteController extends Controller
 				if ($role === 'admin') {
 					$this->redirect(['site/adminUsers/index']);
 				} elseif ($role === 'employee') {
-					$this->redirect(['index']);
+					$this->redirect(['site/adminRegions/index']);
 				}
 			} else {
 				Yii::app()->user->setFlash('error', 'Login failed.');
