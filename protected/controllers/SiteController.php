@@ -189,4 +189,56 @@ class SiteController extends Controller
 		}
 		$this->redirect(['site/adminRegions/index']);
 	}
+
+	// Admin-actions
+	public function actionAdminActions()
+	{
+		$dataProvider = new CActiveDataProvider('Action');
+		$this->render('adminActions/index', ['dataProvider' => $dataProvider]);
+	}
+
+	public function actionAdminActionsCreate()
+	{
+		$model = new Action;
+
+		if (isset($_POST['Action'])) {
+			$model->attributes = $_POST['Action'];
+			if ($model->save()) {
+				Yii::app()->user->setFlash('success', 'Action created successfully.');
+				$this->redirect(['site/adminActions/index']);
+			} else {
+				Yii::app()->user->setFlash('error', 'Failed to create action.');
+			}
+		}
+
+		$this->render('adminActions/create', ['model' => $model]);
+	}
+
+	public function actionAdminActionsUpdate($id)
+	{
+		$model = Action::model()->findByPk($id);
+
+		if (isset($_POST['Action'])) {
+			$model->attributes = $_POST['Action'];
+			if ($model->save()) {
+				Yii::app()->user->setFlash('success', 'Action updated successfully.');
+				$this->redirect(['site/adminActions/index']);
+			} else {
+				Yii::app()->user->setFlash('error', 'Failed to update action.');
+			}
+		}
+
+		$this->render('adminActions/update', ['model' => $model]);
+	}
+
+	public function actionAdminActionsDelete($id)
+	{
+		$model = Action::model()->findByPk($id);
+		if ($model->delete()) {
+			Yii::app()->user->setFlash('success', 'Action deleted successfully.');
+		} else {
+			Yii::app()->user->setFlash('error', 'Failed to delete action.');
+		}
+		$this->redirect(['site/adminActions/index']);
+	}
 }
