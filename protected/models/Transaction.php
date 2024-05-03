@@ -10,34 +10,45 @@ class Transaction extends CActiveRecord
   public function rules()
   {
     return [
-      ['patient_id, employee_id, action_id, medicine_id', 'required'],
-      ['total_cost', 'numerical'],
-      ['patient_id, employee_id, action_id, medicine_id', 'numerical', 'integerOnly' => true],
-      ['transaction_date', 'date', 'format' => 'yyyy-MM-dd HH:mm:ss'],
+      ['patient_id, employee_id, action_id, medicine_id, total_cost', 'required'],
+      ['patient_id', 'validatePatientId'],
+      ['employee_id', 'validateEmployeeId'],
+      ['action_id', 'validateActionId'],
+      ['medicine_id', 'validateMedicineId'],
+      ['total_cost', 'numerical', 'min' => 0],
     ];
   }
 
-  public function attributeLabels()
+  public function validatePatientId($attribute, $params)
   {
-    return [
-      'id' => 'ID',
-      'patient_id' => 'Patient ID',
-      'employee_id' => 'Employee ID',
-      'action_id' => 'Action ID',
-      'medicine_id' => 'Medicine ID',
-      'total_cost' => 'Total Cost',
-      'transaction_date' => 'Transaction Date',
-    ];
+    $patient = Patient::model()->findByPk($this->$attribute);
+    if (!$patient) {
+      $this->addError($attribute, 'Invalid Patient ID.');
+    }
   }
 
-  public function relations()
+  public function validateEmployeeId($attribute, $params)
   {
-    return [
-      'patient' => [self::BELONGS_TO, 'Patient', 'patient_id'],
-      'employee' => [self::BELONGS_TO, 'Employee', 'employee_id'],
-      'action' => [self::BELONGS_TO, 'Action', 'action_id'],
-      'medicine' => [self::BELONGS_TO, 'Medicine', 'medicine_id'],
-    ];
+    $employee = User::model()->findByPk($this->$attribute);
+    if (!$employee || $employee->role !== 'employee') {
+      $this->addError($attribute, 'Invalid Employee ID.');
+    }
+  }
+
+  public function validateActionId($attribute, $params)
+  {
+    $action = Action::model()->findByPk($this->$attribute);
+    if (!$action) {
+      $this->addError($attribute, 'Invalid Action ID.');
+    }
+  }
+
+  public function validateMedicineId($attribute, $params)
+  {
+    $medicine = Medicine::model()->findByPk($this->$attribute);
+    if (!$medicine) {
+      $this->addError($attribute, 'Invalid Medicine ID.');
+    }
   }
 
   public static function model($className = __CLASS__)

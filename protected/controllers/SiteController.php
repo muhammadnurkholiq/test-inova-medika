@@ -345,4 +345,72 @@ class SiteController extends Controller
 		}
 		$this->redirect(['site/AdminMedicines/index']);
 	}
+
+	// Admin-Transaction
+	public function actionAdminTransactions()
+	{
+		$dataProvider = new CActiveDataProvider('Transaction');
+		$this->render('AdminTransactions/index', ['dataProvider' => $dataProvider]);
+	}
+
+	public function actionAdminTransactionsCreate()
+	{
+		$model = new Transaction;
+
+		if (isset($_POST['Transaction'])) {
+			$model->attributes = $_POST['Transaction'];
+
+			$action = Action::model()->findByPk($model->action_id);
+			$medicine = Medicine::model()->findByPk($model->medicine_id);
+
+			if ($action && $medicine) {
+				$model->total_cost = $action->cost + $medicine->price;
+			}
+
+			if ($model->save()) {
+				Yii::app()->user->setFlash('success', 'Transaction created successfully.');
+				$this->redirect(['site/AdminTransactions/index']);
+			} else {
+				Yii::app()->user->setFlash('error', 'Failed to create transaction.');
+			}
+		}
+
+		$this->render('AdminTransactions/create', ['model' => $model]);
+	}
+
+	public function actionAdminTransactionsUpdate($id)
+	{
+		$model = Transaction::model()->findByPk($id);
+
+		if (isset($_POST['Transaction'])) {
+			$model->attributes = $_POST['Transaction'];
+
+			$action = Action::model()->findByPk($model->action_id);
+			$medicine = Medicine::model()->findByPk($model->medicine_id);
+
+			if ($action && $medicine) {
+				$model->total_cost = $action->cost + $medicine->price;
+			}
+
+			if ($model->save()) {
+				Yii::app()->user->setFlash('success', 'Transaction updated successfully.');
+				$this->redirect(['site/AdminTransactions/index']);
+			} else {
+				Yii::app()->user->setFlash('error', 'Failed to update transaction.');
+			}
+		}
+
+		$this->render('AdminTransactions/update', ['model' => $model]);
+	}
+
+	public function actionAdminTransactionsDelete($id)
+	{
+		$model = Transaction::model()->findByPk($id);
+		if ($model->delete()) {
+			Yii::app()->user->setFlash('success', 'Transaction deleted successfully.');
+		} else {
+			Yii::app()->user->setFlash('error', 'Failed to delete transaction.');
+		}
+		$this->redirect(['site/AdminTransactions/index']);
+	}
 }
