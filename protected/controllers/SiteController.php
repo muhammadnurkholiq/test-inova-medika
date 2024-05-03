@@ -18,15 +18,6 @@ class SiteController extends Controller
 		);
 	}
 
-	protected function loadModel($id)
-	{
-		$model = User::model()->findByPk($id);
-		if ($model === null) {
-			throw new CHttpException(404, 'The requested user does not exist.');
-		}
-		return $model;
-	}
-
 	/**
 	 * Default 'index' action.
 	 */
@@ -49,7 +40,8 @@ class SiteController extends Controller
 		}
 	}
 
-	// Login action.
+	// auth 
+	// login
 	public function actionLogin()
 	{
 		$model = new LoginForm;
@@ -70,8 +62,15 @@ class SiteController extends Controller
 
 		$this->render('login', ['model' => $model]);
 	}
+	// logout
+	public function actionLogout()
+	{
+		Yii::app()->user->logout();
+		$this->redirect(Yii::app()->homeUrl);
+	}
 
-	// Admin-users actions.
+
+	// Admin-users
 	public function actionAdminUsers()
 	{
 		$dataProvider = new CActiveDataProvider('User');
@@ -97,7 +96,7 @@ class SiteController extends Controller
 
 	public function actionAdminUsersUpdate($id)
 	{
-		$model = $this->loadModel($id);
+		$model = User::model()->findByPk($id);
 
 		if (isset($_POST['User'])) {
 			$model->attributes = $_POST['User'];
@@ -105,7 +104,7 @@ class SiteController extends Controller
 			if (!empty($model->password)) {
 				$model->password = md5($model->password);
 			} else {
-				$model->password = $this->loadModel($id)->password;
+				$model->password = User::model()->findByPk($id)->password;
 			}
 
 			if ($model->save()) {
@@ -119,14 +118,12 @@ class SiteController extends Controller
 		$this->render('adminUsers/update', ['model' => $model]);
 	}
 
-
 	public function actionAdminUsersDelete($id)
 	{
 		if ($id == 1) {
-			// Cegah penghapusan pengguna admin dengan ID 1
 			Yii::app()->user->setFlash('error', 'Admin user with ID 1 cannot be deleted.');
 		} else {
-			$model = $this->loadModel($id);
+			$model = User::model()->findByPk($id);
 			if ($model->delete()) {
 				Yii::app()->user->setFlash('success', 'User deleted successfully.');
 			} else {
@@ -136,12 +133,60 @@ class SiteController extends Controller
 		$this->redirect(['site/adminUsers/index']);
 	}
 
-	/**
-	 * Logs out the current user and redirects to homepage.
-	 */
-	public function actionLogout()
+	// Admin-regions
+	public function actionAdminRegions()
 	{
-		Yii::app()->user->logout();
-		$this->redirect(Yii::app()->homeUrl);
+		$dataProvider = new CActiveDataProvider('Region');
+		$this->render('adminRegions/index', ['dataProvider' => $dataProvider]);
+	}
+
+	public function actionAdminRegionsCreate()
+	{
+		$model = new Region;
+
+		if (isset($_POST['Region'])) {
+			$model->attributes = $_POST['Region'];
+			if ($model->save()) {
+				Yii::app()->user->setFlash('success', 'Region created successfully.');
+				$this->redirect(['site/adminRegions/index']);
+			} else {
+				Yii::app()->user->setFlash('error', 'Failed to create region.');
+			}
+		}
+
+		$this->render('adminRegions/create', ['model' => $model]);
+	}
+
+	public function actionAdminRegionsUpdate($id)
+	{
+		$model = Region::model()->findByPk($id);
+
+		if (isset($_POST['Region'])) {
+			$model->attributes = $_POST['Region'];
+
+			if ($model->save()) {
+				Yii::app()->user->setFlash('success', 'Region updated successfully.');
+				$this->redirect(['site/adminRegions/index']);
+			} else {
+				Yii::app()->user->setFlash('error', 'Failed to update region.');
+			}
+		}
+
+		$this->render('adminRegions/update', ['model' => $model]);
+	}
+
+	public function actionAdminRegionsDelete($id)
+	{
+		if ($id == 1) {
+			Yii::app()->user->setFlash('error', 'Admin region with ID 1 cannot be deleted.');
+		} else {
+			$model = Region::model()->findByPk($id);
+			if ($model->delete()) {
+				Yii::app()->user->setFlash('success', 'Region deleted successfully.');
+			} else {
+				Yii::app()->user->setFlash('error', 'Failed to delete region.');
+			}
+		}
+		$this->redirect(['site/adminRegions/index']);
 	}
 }

@@ -31,7 +31,8 @@
 			<?php $this->widget('zii.widgets.CMenu', array(
 				'items' => array(
 					// admin
-					array('label' => 'User Management', 'url' => array('site/adminUsers/index'),  'visible' => !Yii::app()->user->isGuest && Yii::app()->user->role = 'admin'),
+					array('label' => 'User', 'url' => array('site/adminUsers/index'),  'visible' => !Yii::app()->user->isGuest && Yii::app()->user->role = 'admin'),
+					array('label' => 'Region', 'url' => array('site/adminRegions/index'),  'visible' => !Yii::app()->user->isGuest && Yii::app()->user->role = 'admin'),
 
 					// employee
 
