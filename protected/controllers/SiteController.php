@@ -293,4 +293,56 @@ class SiteController extends Controller
 		}
 		$this->redirect(['site/AdminPatients/index']);
 	}
+
+	// Admin-medicines
+	public function actionAdminMedicines()
+	{
+		$dataProvider = new CActiveDataProvider('Medicine');
+		$this->render('AdminMedicines/index', ['dataProvider' => $dataProvider]);
+	}
+
+	public function actionAdminMedicinesCreate()
+	{
+		$model = new Medicine;
+
+		if (isset($_POST['Medicine'])) {
+			$model->attributes = $_POST['Medicine'];
+			if ($model->save()) {
+				Yii::app()->user->setFlash('success', 'Medicine created successfully.');
+				$this->redirect(['site/AdminMedicines/index']);
+			} else {
+				Yii::app()->user->setFlash('error', 'Failed to create medicine.');
+			}
+		}
+
+		$this->render('AdminMedicines/create', ['model' => $model]);
+	}
+
+	public function actionAdminMedicinesUpdate($id)
+	{
+		$model = Medicine::model()->findByPk($id);;
+
+		if (isset($_POST['Medicine'])) {
+			$model->attributes = $_POST['Medicine'];
+			if ($model->save()) {
+				Yii::app()->user->setFlash('success', 'Medicine updated successfully.');
+				$this->redirect(['site/AdminMedicines/index']);
+			} else {
+				Yii::app()->user->setFlash('error', 'Failed to update medicine.');
+			}
+		}
+
+		$this->render('AdminMedicines/update', ['model' => $model]);
+	}
+
+	public function actionAdminMedicinesDelete($id)
+	{
+		$model = Medicine::model()->findByPk($id);;
+		if ($model->delete()) {
+			Yii::app()->user->setFlash('success', 'Medicine deleted successfully.');
+		} else {
+			Yii::app()->user->setFlash('error', 'Failed to delete medicine.');
+		}
+		$this->redirect(['site/AdminMedicines/index']);
+	}
 }
