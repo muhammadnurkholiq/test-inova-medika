@@ -241,4 +241,56 @@ class SiteController extends Controller
 		}
 		$this->redirect(['site/adminActions/index']);
 	}
+
+	// Admin-patient
+	public function actionAdminPatients()
+	{
+		$dataProvider = new CActiveDataProvider('Patient');
+		$this->render('AdminPatients/index', ['dataProvider' => $dataProvider]);
+	}
+
+	public function actionAdminPatientsCreate()
+	{
+		$model = new Patient;
+
+		if (isset($_POST['Patient'])) {
+			$model->attributes = $_POST['Patient'];
+			if ($model->save()) {
+				Yii::app()->user->setFlash('success', 'Patient created successfully.');
+				$this->redirect(['site/AdminPatients/index']);
+			} else {
+				Yii::app()->user->setFlash('error', 'Failed to create patient.');
+			}
+		}
+
+		$this->render('AdminPatients/create', ['model' => $model]);
+	}
+
+	public function actionAdminPatientsUpdate($id)
+	{
+		$model = Patient::model()->findByPk($id);
+
+		if (isset($_POST['Patient'])) {
+			$model->attributes = $_POST['Patient'];
+			if ($model->save()) {
+				Yii::app()->user->setFlash('success', 'Patient updated successfully.');
+				$this->redirect(['site/AdminPatients/index']);
+			} else {
+				Yii::app()->user->setFlash('error', 'Failed to update patient.');
+			}
+		}
+
+		$this->render('AdminPatients/update', ['model' => $model]);
+	}
+
+	public function actionAdminPatientsDelete($id)
+	{
+		$model = Patient::model()->findByPk($id);
+		if ($model->delete()) {
+			Yii::app()->user->setFlash('success', 'Patient deleted successfully.');
+		} else {
+			Yii::app()->user->setFlash('error', 'Failed to delete patient.');
+		}
+		$this->redirect(['site/AdminPatients/index']);
+	}
 }

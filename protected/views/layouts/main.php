@@ -34,6 +34,7 @@
 					array('label' => 'User', 'url' => array('site/adminUsers/index'),  'visible' => !Yii::app()->user->isGuest && Yii::app()->user->role = 'admin'),
 					array('label' => 'Region', 'url' => array('site/adminRegions/index'),  'visible' => !Yii::app()->user->isGuest && Yii::app()->user->role = 'admin'),
 					array('label' => 'Action', 'url' => array('site/adminActions/index'),  'visible' => !Yii::app()->user->isGuest && Yii::app()->user->role = 'admin'),
+					array('label' => 'Patient', 'url' => array('site/adminPatients/index'),  'visible' => !Yii::app()->user->isGuest && Yii::app()->user->role = 'admin'),
 
 					// employee
 
